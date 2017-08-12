@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- DAOFactory  -->
+	<bean id="bookDAO" class="by.htp.task1.dao.impl.BookDAOImpl"/>
+	<bean id="userDAO" class="by.htp.task1.dao.impl.UserDAOImpl"/>
+	<bean id="initializationDAO" class="by.htp.task1.dao.impl.InitializationDAOImpl"/>
+	
+	<bean id="daoFactory" class="by.htp.task1.dao.factory.DAOFactory">
+		<constructor-arg name="bookDAO" ref="bookDAO"/>
+		<constructor-arg name="userDAO" ref="userDAO"/>
+		<constructor-arg name="initializationDAO" ref="initializationDAO"/>
+	</bean>
+	
+	<!-- ServiceFactory -->
+	<bean id="userService" class="by.htp.task1.service.impl.UserServiceImpl"/>
+	<bean id="bookService" class="by.htp.task1.service.impl.BookServiceImpl"/>
+	<bean id="initializationService" class="by.htp.task1.service.impl.InitializationServiceImpl"/>
+	
+	<bean id="serviceFactory" class="by.htp.task1.service.factory.ServiceFactory">
+		<constructor-arg name="bookService" ref="bookService"/>
+		<constructor-arg name="userService" ref="userService"/>
+		<constructor-arg name="initializationService" ref="initializationService"/>
+	</bean>
+	
+	
+	<!-- ConnectionPool  -->
+	<bean id="dbResourceManager" class="by.htp.task1.dao.connection.manager.DBResourceManager"/>
+	
+	<bean id="connectionPool" class="by.htp.task1.dao.connection.ConnectionPool">
+		<constructor-arg name="dbResourceManager" ref="dbResourceManager"/>
+	</bean>
+	
+	
+</beans>
