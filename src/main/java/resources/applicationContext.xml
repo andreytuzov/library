@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-	<!-- DAOFactory  -->
-	<bean id="bookDAO" class="by.htp.task1.dao.impl.BookDAOImpl"/>
-	<bean id="userDAO" class="by.htp.task1.dao.impl.UserDAOImpl"/>
-	<bean id="initializationDAO" class="by.htp.task1.dao.impl.InitializationDAOImpl"/>
+	<context:component-scan base-package="by.htp.task1" />
+
+
+	<util:constant id="ADD_NEW_BOOK" static-field="by.htp.task1.controller.command.CommandName.ADD_NEW_BOOK"/>
+	<util:constant id="DESTROY_SOURCE" static-field="by.htp.task1.controller.command.CommandName.DESTROY_SOURCE"/>
+	<util:constant id="GET_BOOKLIST" static-field="by.htp.task1.controller.command.CommandName.GET_BOOKLIST"/>
+	<util:constant id="INITIALIZATION_SOURCE" static-field="by.htp.task1.controller.command.CommandName.INITIALIZATION_SOURCE"/>
+	<util:constant id="REMOVE_BOOK" static-field="by.htp.task1.controller.command.CommandName.REMOVE_BOOK"/>
+	<util:constant id="SIGN_IN" static-field="by.htp.task1.controller.command.CommandName.SIGN_IN"/>
+	<util:constant id="SIGN_UP" static-field="by.htp.task1.controller.command.CommandName.SIGN_UP"/>
+	<util:constant id="ADD_EDIT_BOOK" static-field="by.htp.task1.controller.command.CommandName.ADD_EDIT_BOOK"/>
+	<util:constant id="WRONG_REQUEST" static-field="by.htp.task1.controller.command.CommandName.WRONG_REQUEST"/>
 	
-	<bean id="daoFactory" class="by.htp.task1.dao.factory.DAOFactory">
-		<constructor-arg name="bookDAO" ref="bookDAO"/>
-		<constructor-arg name="userDAO" ref="userDAO"/>
-		<constructor-arg name="initializationDAO" ref="initializationDAO"/>
-	</bean>
-	
-	<!-- ServiceFactory -->
-	<bean id="userService" class="by.htp.task1.service.impl.UserServiceImpl"/>
-	<bean id="bookService" class="by.htp.task1.service.impl.BookServiceImpl"/>
-	<bean id="initializationService" class="by.htp.task1.service.impl.InitializationServiceImpl"/>
-	
-	<bean id="serviceFactory" class="by.htp.task1.service.factory.ServiceFactory">
-		<constructor-arg name="bookService" ref="bookService"/>
-		<constructor-arg name="userService" ref="userService"/>
-		<constructor-arg name="initializationService" ref="initializationService"/>
-	</bean>
-	
-	
-	<!-- ConnectionPool  -->
-	<bean id="dbResourceManager" class="by.htp.task1.dao.connection.manager.DBResourceManager"/>
-	
-	<bean id="connectionPool" class="by.htp.task1.dao.connection.ConnectionPool">
-		<constructor-arg name="dbResourceManager" ref="dbResourceManager"/>
+
+	<bean id="commandProvider" class="by.htp.task1.controller.command.CommandProvider">
+		<constructor-arg name="repository">
+			<map>
+				<entry key-ref="ADD_NEW_BOOK" value-ref="addNewBook"/>
+				<entry key-ref="DESTROY_SOURCE" value-ref="destroySource"/>
+				<entry key-ref="GET_BOOKLIST" value-ref="getBookList"/>
+				<entry key-ref="INITIALIZATION_SOURCE" value-ref="initializationSource"/>
+				<entry key-ref="REMOVE_BOOK" value-ref="removeBook"/>
+				<entry key-ref="SIGN_IN" value-ref="signIn"/>
+				<entry key-ref="SIGN_UP" value-ref="signUp"/>
+				<entry key-ref="ADD_EDIT_BOOK" value-ref="addEditBook"/>
+				<entry key-ref="WRONG_REQUEST" value-ref="wrongRequest"/>
+			</map>
+		</constructor-arg>
 	</bean>
 	
 	

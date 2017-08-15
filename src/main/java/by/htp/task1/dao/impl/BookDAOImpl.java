@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.htp.task1.bean.ApplicationContextWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import by.htp.task1.dao.BookDAO;
 import by.htp.task1.dao.ColumnLabel;
 import by.htp.task1.dao.SQLCommand;
@@ -17,13 +19,14 @@ import by.htp.task1.dao.exception.ConnectionPoolException;
 import by.htp.task1.dao.exception.DAOException;
 import by.htp.task1.entity.Book;
 
+@Component
 public class BookDAOImpl implements BookDAO {
+
+	@Autowired
+	private ConnectionPool pool;
 
 	@Override
 	public void addNewBook(String title, String author, String genre, String year, int quantity) throws DAOException {
-
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -49,8 +52,6 @@ public class BookDAOImpl implements BookDAO {
 	@Override
 	public void addEditBook(String title, String genre, String author, String year, int quantity, int idBook)
 			throws DAOException {
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
@@ -75,8 +76,6 @@ public class BookDAOImpl implements BookDAO {
 
 	@Override
 	public void removeBook(int id) throws DAOException {
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
@@ -100,10 +99,7 @@ public class BookDAOImpl implements BookDAO {
 
 	@Override
 	public List<Book> getBooklist() throws DAOException {
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
-		
-		
+
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;

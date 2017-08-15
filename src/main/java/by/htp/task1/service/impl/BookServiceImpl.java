@@ -3,7 +3,9 @@ package by.htp.task1.service.impl;
 import java.util.IllegalFormatException;
 import java.util.List;
 
-import by.htp.task1.bean.ApplicationContextWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import by.htp.task1.dao.BookDAO;
 import by.htp.task1.dao.exception.DAOException;
 import by.htp.task1.dao.factory.DAOFactory;
@@ -12,12 +14,11 @@ import by.htp.task1.service.BookService;
 import by.htp.task1.service.exception.ServiceException;
 import by.htp.task1.service.validation.ValidationData;
 
+@Component
 public class BookServiceImpl implements BookService {
 
-	private BookDAO getBookDAO() {
-		return ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(DAOFactory.class).getBookDAO();
-	}
+	@Autowired
+	private DAOFactory daoFactory;
 
 	@Override
 	public void addNewBook(String title, String genre, String author,
@@ -33,7 +34,7 @@ public class BookServiceImpl implements BookService {
 			throw new ServiceException("Year format exception");
 		}
 
-		BookDAO bookDAO = getBookDAO();
+		BookDAO bookDAO = daoFactory.getBookDAO();
 		try {
 			bookDAO.addNewBook(title, author, genre, year, quantity);
 		} catch (DAOException e) {
@@ -54,7 +55,7 @@ public class BookServiceImpl implements BookService {
 		int idBook = Integer.parseInt(idBookStr);
 		int quantity = Integer.parseInt(quantityStr);
 
-		BookDAO bookDAO = getBookDAO();
+		BookDAO bookDAO = daoFactory.getBookDAO();
 		try {
 			bookDAO.addEditBook(title, genre, author, year, quantity, idBook);
 		} catch (DAOException e) {
@@ -70,7 +71,7 @@ public class BookServiceImpl implements BookService {
 
 		int idBook = Integer.parseInt(idBookStr);
 
-		BookDAO bookDAO = getBookDAO();
+		BookDAO bookDAO = daoFactory.getBookDAO();
 		try {
 			bookDAO.removeBook(idBook);
 		} catch (DAOException ex) {
@@ -81,7 +82,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> getBooklist() throws ServiceException {
-		BookDAO bookDAO = getBookDAO();
+		BookDAO bookDAO = daoFactory.getBookDAO();
 		List<Book> booklist = null;
 
 		try {

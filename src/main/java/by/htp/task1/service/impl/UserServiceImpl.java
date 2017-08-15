@@ -1,6 +1,8 @@
 package by.htp.task1.service.impl;
 
-import by.htp.task1.bean.ApplicationContextWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import by.htp.task1.dao.UserDAO;
 import by.htp.task1.dao.exception.DAOException;
 import by.htp.task1.dao.factory.DAOFactory;
@@ -9,20 +11,20 @@ import by.htp.task1.service.UserService;
 import by.htp.task1.service.exception.ServiceException;
 import by.htp.task1.service.validation.ValidationData;
 
+
+@Component
 public class UserServiceImpl implements UserService {
 
-	private UserDAO getUserDao() {
-		return ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(DAOFactory.class).getUserDAO();
-	}
-
+	@Autowired
+	private DAOFactory daoFactory;
+	
 	@Override
 	public void signIn(String login, String password) throws ServiceException {
 		if (!ValidationData.validUser(login, password)) {
 			throw new ServiceException("Iccorrent user's login or password");
 		}
 
-		UserDAO userDAO = getUserDao();
+		UserDAO userDAO = daoFactory.getUserDAO();
 
 		// Attention String_paswword convert to int_password(HashCode)
 		try {
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException("Icorrent user's login or password");
 		}
 		
-		UserDAO userDAO = getUserDao();
+		UserDAO userDAO = daoFactory.getUserDAO();
 
 		// Attention String_paswword convert to int_password(HashCode)
 		try {

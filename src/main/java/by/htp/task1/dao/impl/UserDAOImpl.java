@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import by.htp.task1.bean.ApplicationContextWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import by.htp.task1.dao.ColumnLabel;
 import by.htp.task1.dao.SQLCommand;
 import by.htp.task1.dao.UserDAO;
@@ -14,12 +16,14 @@ import by.htp.task1.dao.exception.ConnectionPoolException;
 import by.htp.task1.dao.exception.DAOException;
 import by.htp.task1.entity.User;
 
+@Component
 public class UserDAOImpl implements UserDAO {
 
+	@Autowired
+	private ConnectionPool pool;
+	
 	@Override
 	public User signIn(String login, int password) throws DAOException {
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
 		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 		ResultSet resultSet = null;
@@ -52,8 +56,6 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void signUp(String login, int password) throws DAOException {
-		ConnectionPool pool = ApplicationContextWrapper.getInstance().getApplicationContext()
-				.getBean(ConnectionPool.class);
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
