@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
 	<context:component-scan base-package="by.htp.task1" />
-
+	<context:property-placeholder location="classpath:resources/database.properties"/>
 
 	<util:constant id="ADD_NEW_BOOK" static-field="by.htp.task1.controller.command.CommandName.ADD_NEW_BOOK"/>
 	<util:constant id="DESTROY_SOURCE" static-field="by.htp.task1.controller.command.CommandName.DESTROY_SOURCE"/>

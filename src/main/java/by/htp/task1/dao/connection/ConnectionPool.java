@@ -14,11 +14,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import by.htp.task1.dao.connection.manager.DBParameter;
-import by.htp.task1.dao.connection.manager.DBResourceManager;
 import by.htp.task1.dao.exception.ConnectionPoolException;
 import by.htp.task1.dao.exception.DAOException;
 
@@ -30,24 +28,22 @@ public final class ConnectionPool implements Closeable {
 	private BlockingQueue<Connection> freeConnection;
 	private BlockingQueue<Connection> busyConnection;
 
+	@Value("${db.poolsize}")
 	private int poolsize;
+	
+	@Value("${db.driver}")
 	private String driver;
+	
+	@Value("${db.user}")
 	private String user;
+	
+	@Value("${db.password}")
 	private String password;
+	
+	@Value("${db.url}")
 	private String url;
 
-	@Autowired
-	public ConnectionPool(DBResourceManager dbResourceManager) {
-		this.driver = dbResourceManager.getValue(DBParameter.DB_DRIVER);
-		this.user = dbResourceManager.getValue(DBParameter.DB_USER);
-		this.password = dbResourceManager.getValue(DBParameter.DB_PASSWORD);
-		this.url = dbResourceManager.getValue(DBParameter.DB_URL);
-
-		try {
-			this.poolsize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POOLSIZE));
-		} catch (NumberFormatException e) {
-			this.poolsize = 6;
-		}
+	public ConnectionPool() {
 	}
 
 	public void init() throws ConnectionPoolException {
